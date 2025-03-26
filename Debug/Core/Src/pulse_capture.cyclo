@@ -1,6 +1,6 @@
-../Core/Src/pulse_capture.c:29:6:processPulses	4
-../Core/Src/pulse_capture.c:43:6:get_Sample	3
-../Core/Src/pulse_capture.c:61:6:HAL_GPIO_EXTI_Rising_Callback	2
-../Core/Src/pulse_capture.c:69:6:HAL_GPIO_EXTI_Falling_Callback	2
-../Core/Src/pulse_capture.c:78:26:get_width_pulses	1
-../Core/Src/pulse_capture.c:83:6:setTimerPulses	1
+../Core/Src/pulse_capture.c:30:6:processPulses	7
+../Core/Src/pulse_capture.c:58:6:get_Sample	3
+../Core/Src/pulse_capture.c:70:6:HAL_GPIO_EXTI_Rising_Callback	2
+../Core/Src/pulse_capture.c:78:6:HAL_GPIO_EXTI_Falling_Callback	2
+../Core/Src/pulse_capture.c:87:26:get_width_pulses	1
+../Core/Src/pulse_capture.c:92:6:setTimerPulses	1

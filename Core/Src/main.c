@@ -32,7 +32,7 @@
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
-// #define PULSE_BUFFER_SIZE 60
+
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -43,113 +43,36 @@
 /* Private variables ---------------------------------------------------------*/
 
 TIM_HandleTypeDef htim3;
+TIM_HandleTypeDef htim14;
 
 /* USER CODE BEGIN PV */
+void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
+{
+    if (htim->Instance == TIM14) // Verifica se é o TIM2
+    {
+        // Chamar funções a cada 1ms
+        processPulses();
 
-// volatile uint32_t pulse_buffer[PULSE_BUFFER_SIZE]; // Buffer para armazenar os tempos das bordas
-// volatile uint32_t pulse_final[PULSE_BUFFER_SIZE];
-// volatile uint8_t pulse_index = 0;
-// volatile uint8_t data_ready = 0; // Indica quando os 40 pulsos foram coletados
-
+        if (data_ready)
+        {
+        	analyze_pulses();
+            data_ready = 0; // Reseta a flag após o uso
+        }
+    }
+}
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
 static void MX_TIM3_Init(void);
+static void MX_TIM14_Init(void);
 /* USER CODE BEGIN PFP */
 
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-
-// void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim)
-//{
-//     if (htim->Instance == TIM3 && htim->Channel == HAL_TIM_ACTIVE_CHANNEL_2)
-//     {
-// HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_9);
-
-//        if (first_time)
-//        {
-//            __HAL_TIM_SET_COUNTER(htim, 0);
-//            first_time = 0;
-//        }
-//        // HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_9);
-//
-//        if (pulse_index < PULSE_BUFFER_SIZE)
-//        {
-//            pulse_buffer[pulse_index++] = HAL_TIM_ReadCapturedValue(htim, TIM_CHANNEL_2);
-//        }
-//
-//        if (pulse_index >= PULSE_BUFFER_SIZE)
-//        {
-//            data_ready = 1;  // Indica que os dados estão prontos para processamento
-//            pulse_index = 0; // Reinicia o índice para a próxima captura
-//            __HAL_TIM_DISABLE_IT(&htim3, TIM_IT_CC2);
-//            first_time = 1;
-//        }
-//    }
-//}
-
-// void HAL_GPIO_EXTI_Rising_Callback(uint16_t GPIO_Pin) {
-//     if (GPIO_Pin == GPIO_PIN_14) {
-//         //HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_9);
-//
-//         if (pulse_index < PULSE_BUFFER_SIZE)
-//		{
-//			pulse_buffer[pulse_index++] = __HAL_TIM_GET_COUNTER(&htim3);
-//		}
-//
-//         else
-//		{
-//			data_ready = 1;  // Indica que os dados estão prontos para processamento
-//			pulse_index = 0; // Reinicia o índice para a próxima captura
-//		}
-//     }
-// }
-//
-// void HAL_GPIO_EXTI_Falling_Callback(uint16_t GPIO_Pin) {
-//     if (GPIO_Pin == GPIO_PIN_14) {
-//         //HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_9);
-//
-//         if (pulse_index < PULSE_BUFFER_SIZE)
-//		{
-//			pulse_buffer[pulse_index++] = __HAL_TIM_GET_COUNTER(&htim3);
-//		}
-//
-//		else
-//		{
-//			data_ready = 1;  // Indica que os dados estão prontos para processamento
-//			pulse_index = 0; // Reinicia o índice para a próxima captura
-//		}
-//     }
-// }
-
-// void process_pulses()
-//{
-//     if (data_ready)
-//     {
-//         for (uint8_t i = 0, j = 0; i < PULSE_BUFFER_SIZE - 1; i++, j++)
-//         {
-//             pulse_final[j] = (pulse_buffer[i + 1] >= pulse_buffer[i]) ?
-//                              (pulse_buffer[i + 1] - pulse_buffer[i]) :
-//                              ((0xFFFF - pulse_buffer[i]) + pulse_buffer[i + 1]);
-//         }
-//
-//         data_ready = 0; // Reseta a flag para a próxima captura
-//     }
-// }
-
-// Polling do botão PA9 para reativar interrupções
-// void button_polling()
-//{
-//    if (HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_9) == GPIO_PIN_RESET)
-//    {
-//        // Botão pressionado → Habilita interrupções
-//       _//_HAL_TIM_ENABLE_IT(&htim3, TIM_IT_CC2);
-//    }
-//}
 
 /* USER CODE END 0 */
 
@@ -183,9 +106,11 @@ int main(void)
     /* Initialize all configured peripherals */
     MX_GPIO_Init();
     MX_TIM3_Init();
+    MX_TIM14_Init();
     /* USER CODE BEGIN 2 */
     // HAL_TIM_IC_Start_IT(&htim3, TIM_CHANNEL_2);
     HAL_TIM_Base_Start(&htim3);
+    HAL_TIM_Base_Start_IT(&htim14);
     setTimerPulses(&htim3);
     /* USER CODE END 2 */
 
@@ -193,7 +118,6 @@ int main(void)
     /* USER CODE BEGIN WHILE */
     while (1)
     {
-        processPulses();
         //    	button_polling(); // Verifica o estado do botão
         //
         //        if (data_ready)
@@ -287,6 +211,36 @@ static void MX_TIM3_Init(void)
     /* USER CODE BEGIN TIM3_Init 2 */
 
     /* USER CODE END TIM3_Init 2 */
+}
+
+/**
+ * @brief TIM14 Initialization Function
+ * @param None
+ * @retval None
+ */
+static void MX_TIM14_Init(void)
+{
+
+    /* USER CODE BEGIN TIM14_Init 0 */
+
+    /* USER CODE END TIM14_Init 0 */
+
+    /* USER CODE BEGIN TIM14_Init 1 */
+
+    /* USER CODE END TIM14_Init 1 */
+    htim14.Instance = TIM14;
+    htim14.Init.Prescaler = 47;
+    htim14.Init.CounterMode = TIM_COUNTERMODE_UP;
+    htim14.Init.Period = 999;
+    htim14.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
+    htim14.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
+    if (HAL_TIM_Base_Init(&htim14) != HAL_OK)
+    {
+        Error_Handler();
+    }
+    /* USER CODE BEGIN TIM14_Init 2 */
+
+    /* USER CODE END TIM14_Init 2 */
 }
 
 /**

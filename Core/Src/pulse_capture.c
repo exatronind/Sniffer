@@ -20,41 +20,50 @@ void get_Sample(void);
 // Sem 'volatile', o compilador poderia armazenar valores em registradores,
 // impedindo a detecção correta das mudanças feitas pelas interrupções.
 
-volatile uint32_t pulse_buffer[PULSE_BUFFER_SIZE];
-volatile uint32_t pulse_width[PULSE_BUFFER_SIZE - 1];
-volatile uint8_t data_ready = 0;
+static uint32_t pulse_buffer[PULSE_BUFFER_SIZE];
+static uint32_t pulse_width[PULSE_BUFFER_SIZE - 1];
+uint8_t data_ready = 0;
 static uint16_t pulse_index = 0;
 static TIM_HandleTypeDef *htim = NULL;
+static uint32_t idleTimer = 0;
 
 void processPulses()
 {
     if (data_ready)
-    {
+        return;
 
-        for (uint8_t i = 0, j = 0; i < PULSE_BUFFER_SIZE - 1; i++, j++)
+    if (++idleTimer > 9) // se passar de 5ms, ele reseta o timer e volta para o indice 0 do vetor
+    {
+        if (pulse_index > 1) // Garante que há pelo menos 2 pulsos para calcular tempos
         {
-            pulse_width[j] = (pulse_buffer[i + 1] >= pulse_buffer[i]) ? (pulse_buffer[i + 1] - pulse_buffer[i]) : ((0xFFFF - pulse_buffer[i]) + pulse_buffer[i + 1]);
+            for (uint8_t i = 0, j = 0; i < PULSE_BUFFER_SIZE - 1; i++, j++)
+            {
+                pulse_width[j] = (pulse_buffer[i + 1] >= pulse_buffer[i]) ? (pulse_buffer[i + 1] - pulse_buffer[i]) : ((0xFFFF - pulse_buffer[i]) + pulse_buffer[i + 1]);
+            }
+            data_ready = 1; // Reseta a flag para a próxima captura
         }
 
-        data_ready = 0; // Reseta a flag para a próxima captura
+        //RESET_TIMER(htim);
+        pulse_index = 0; // Reinicia o índice para a próxima captura
+        // data_ready = 1;
+        idleTimer = 0;
+
+        for (uint8_t i = 0; i < PULSE_BUFFER_SIZE; i++)
+        {
+            pulse_buffer[i] = 0;
+        }
     }
 }
 
 void get_Sample(void)
 {
-    if (!data_ready)
+
+    if (data_ready) return; // Se os dados já estão prontos, ignora novas capturas
+
+    if (pulse_index < PULSE_BUFFER_SIZE)
     {
-
-        if (pulse_index < PULSE_BUFFER_SIZE)
-        {
-            pulse_buffer[pulse_index++] = __HAL_TIM_GET_COUNTER(htim);
-        }
-
-        else
-        {
-            data_ready = 1;  // Indica que os dados estão prontos para processamento
-            pulse_index = 0; // Reinicia o índice para a próxima captura
-        }
+        pulse_buffer[pulse_index++] = __HAL_TIM_GET_COUNTER(htim);
+        idleTimer = 0; // Reset o tempo de inatividade quando um novo pulso chega
     }
 }
 

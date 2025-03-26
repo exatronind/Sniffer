@@ -1,0 +1,2 @@
+../Core/Src/pulse_analysis.c:13:6:analyze_pulses	3
+../Core/Src/pulse_analysis.c:35:14:get_duty_cycles	1

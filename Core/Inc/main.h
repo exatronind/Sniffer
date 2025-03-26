@@ -32,6 +32,7 @@ extern "C" {
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "pulse_capture.h"
+#include "pulse_analysis.h"
 /* USER CODE END Includes */
 
 /* Exported types ------------------------------------------------------------*/

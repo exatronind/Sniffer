@@ -11,7 +11,7 @@
 #include "stm32c0xx_hal.h"
 #include <stdint.h>
 
-#define PULSE_BUFFER_SIZE 40
+#define PULSE_BUFFER_SIZE 42
 #define PINO_INTERRUPT GPIO_PIN_14
 
 // Macros
@@ -19,6 +19,7 @@
 
 // extern volatile uint32_t pulse_buffer[PULSE_BUFFER_SIZE];
 // extern volatile uint32_t pulse_width[PULSE_BUFFER_SIZE-1];
+extern uint8_t data_ready;
 
 void HAL_GPIO_EXTI_Rising_Callback(uint16_t GPIO_Pin);
 void HAL_GPIO_EXTI_Falling_Callback(uint16_t GPIO_Pin);
