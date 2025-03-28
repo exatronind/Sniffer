@@ -1,20 +1,20 @@
 /* USER CODE BEGIN Header */
 /**
-  ******************************************************************************
-  * @file    stm32c0xx_it.c
-  * @brief   Interrupt Service Routines.
-  ******************************************************************************
-  * @attention
-  *
-  * Copyright (c) 2025 STMicroelectronics.
-  * All rights reserved.
-  *
-  * This software is licensed under terms that can be found in the LICENSE file
-  * in the root directory of this software component.
-  * If no LICENSE file comes with this software, it is provided AS-IS.
-  *
-  ******************************************************************************
-  */
+ ******************************************************************************
+ * @file    stm32c0xx_it.c
+ * @brief   Interrupt Service Routines.
+ ******************************************************************************
+ * @attention
+ *
+ * Copyright (c) 2025 STMicroelectronics.
+ * All rights reserved.
+ *
+ * This software is licensed under terms that can be found in the LICENSE file
+ * in the root directory of this software component.
+ * If no LICENSE file comes with this software, it is provided AS-IS.
+ *
+ ******************************************************************************
+ */
 /* USER CODE END Header */
 
 /* Includes ------------------------------------------------------------------*/
@@ -64,73 +64,73 @@ extern TIM_HandleTypeDef htim14;
 /*           Cortex Processor Interruption and Exception Handlers          */
 /******************************************************************************/
 /**
-  * @brief This function handles Non maskable interrupt.
-  */
+ * @brief This function handles Non maskable interrupt.
+ */
 void NMI_Handler(void)
 {
-  /* USER CODE BEGIN NonMaskableInt_IRQn 0 */
+    /* USER CODE BEGIN NonMaskableInt_IRQn 0 */
 
-  /* USER CODE END NonMaskableInt_IRQn 0 */
-  /* USER CODE BEGIN NonMaskableInt_IRQn 1 */
-   while (1)
-  {
-  }
-  /* USER CODE END NonMaskableInt_IRQn 1 */
+    /* USER CODE END NonMaskableInt_IRQn 0 */
+    /* USER CODE BEGIN NonMaskableInt_IRQn 1 */
+    while (1)
+    {
+    }
+    /* USER CODE END NonMaskableInt_IRQn 1 */
 }
 
 /**
-  * @brief This function handles Hard fault interrupt.
-  */
+ * @brief This function handles Hard fault interrupt.
+ */
 void HardFault_Handler(void)
 {
-  /* USER CODE BEGIN HardFault_IRQn 0 */
+    /* USER CODE BEGIN HardFault_IRQn 0 */
 
-  /* USER CODE END HardFault_IRQn 0 */
-  while (1)
-  {
-    /* USER CODE BEGIN W1_HardFault_IRQn 0 */
-    /* USER CODE END W1_HardFault_IRQn 0 */
-  }
+    /* USER CODE END HardFault_IRQn 0 */
+    while (1)
+    {
+        /* USER CODE BEGIN W1_HardFault_IRQn 0 */
+        /* USER CODE END W1_HardFault_IRQn 0 */
+    }
 }
 
 /**
-  * @brief This function handles System service call via SWI instruction.
-  */
+ * @brief This function handles System service call via SWI instruction.
+ */
 void SVC_Handler(void)
 {
-  /* USER CODE BEGIN SVC_IRQn 0 */
+    /* USER CODE BEGIN SVC_IRQn 0 */
 
-  /* USER CODE END SVC_IRQn 0 */
-  /* USER CODE BEGIN SVC_IRQn 1 */
+    /* USER CODE END SVC_IRQn 0 */
+    /* USER CODE BEGIN SVC_IRQn 1 */
 
-  /* USER CODE END SVC_IRQn 1 */
+    /* USER CODE END SVC_IRQn 1 */
 }
 
 /**
-  * @brief This function handles Pendable request for system service.
-  */
+ * @brief This function handles Pendable request for system service.
+ */
 void PendSV_Handler(void)
 {
-  /* USER CODE BEGIN PendSV_IRQn 0 */
+    /* USER CODE BEGIN PendSV_IRQn 0 */
 
-  /* USER CODE END PendSV_IRQn 0 */
-  /* USER CODE BEGIN PendSV_IRQn 1 */
+    /* USER CODE END PendSV_IRQn 0 */
+    /* USER CODE BEGIN PendSV_IRQn 1 */
 
-  /* USER CODE END PendSV_IRQn 1 */
+    /* USER CODE END PendSV_IRQn 1 */
 }
 
 /**
-  * @brief This function handles System tick timer.
-  */
+ * @brief This function handles System tick timer.
+ */
 void SysTick_Handler(void)
 {
-  /* USER CODE BEGIN SysTick_IRQn 0 */
+    /* USER CODE BEGIN SysTick_IRQn 0 */
 
-  /* USER CODE END SysTick_IRQn 0 */
-  HAL_IncTick();
-  /* USER CODE BEGIN SysTick_IRQn 1 */
+    /* USER CODE END SysTick_IRQn 0 */
+    HAL_IncTick();
+    /* USER CODE BEGIN SysTick_IRQn 1 */
 
-  /* USER CODE END SysTick_IRQn 1 */
+    /* USER CODE END SysTick_IRQn 1 */
 }
 
 /******************************************************************************/
@@ -141,31 +141,44 @@ void SysTick_Handler(void)
 /******************************************************************************/
 
 /**
-  * @brief This function handles EXTI line 4 to 15 interrupts.
-  */
+ * @brief This function handles EXTI line 4 to 15 interrupts.
+ */
 void EXTI4_15_IRQHandler(void)
 {
-  /* USER CODE BEGIN EXTI4_15_IRQn 0 */
+    /* USER CODE BEGIN EXTI4_15_IRQn 0 */
 
-  /* USER CODE END EXTI4_15_IRQn 0 */
-  HAL_GPIO_EXTI_IRQHandler(PIR_Pin);
-  /* USER CODE BEGIN EXTI4_15_IRQn 1 */
+    /* USER CODE END EXTI4_15_IRQn 0 */
+    // HAL_GPIO_EXTI_IRQHandler(PIR_Pin);
+    /* USER CODE BEGIN EXTI4_15_IRQn 1 */
 
-  /* USER CODE END EXTI4_15_IRQn 1 */
+    if (EXTI->RPR1 & EXTI_RPR1_RPIF14)
+    {
+        GPIOA->ODR |= GPIO_ODR_OD9;
+        EXTI->RPR1 |= EXTI_RPR1_RPIF14;
+        get_Sample();
+    }
+    if (EXTI->FPR1 & EXTI_FPR1_FPIF14)
+    {
+        GPIOA->ODR &= ~GPIO_ODR_OD9;
+        EXTI->FPR1 |= EXTI_FPR1_FPIF14;
+        get_Sample();
+    }
+
+    /* USER CODE END EXTI4_15_IRQn 1 */
 }
 
 /**
-  * @brief This function handles TIM14 global interrupt.
-  */
+ * @brief This function handles TIM14 global interrupt.
+ */
 void TIM14_IRQHandler(void)
 {
-  /* USER CODE BEGIN TIM14_IRQn 0 */
+    /* USER CODE BEGIN TIM14_IRQn 0 */
 
-  /* USER CODE END TIM14_IRQn 0 */
-  HAL_TIM_IRQHandler(&htim14);
-  /* USER CODE BEGIN TIM14_IRQn 1 */
+    /* USER CODE END TIM14_IRQn 0 */
+    HAL_TIM_IRQHandler(&htim14);
+    /* USER CODE BEGIN TIM14_IRQn 1 */
 
-  /* USER CODE END TIM14_IRQn 1 */
+    /* USER CODE END TIM14_IRQn 1 */
 }
 
 /* USER CODE BEGIN 1 */

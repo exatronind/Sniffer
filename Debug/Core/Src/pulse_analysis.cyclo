@@ -1,2 +1,6 @@
-../Core/Src/pulse_analysis.c:13:6:analyze_pulses	3
-../Core/Src/pulse_analysis.c:35:14:get_duty_cycles	1
+../Core/Src/pulse_analysis.c:20:6:analyze_pulses	3
+../Core/Src/pulse_analysis.c:58:17:get_duty_cycles	1
+../Core/Src/pulse_analysis.c:63:6:convert_duty_to_bits	2
+../Core/Src/pulse_analysis.c:73:16:get_bit_sequence	1
+../Core/Src/pulse_analysis.c:78:9:verify_payload	4
+../Core/Src/pulse_analysis.c:84:6:analyze_payload	3
