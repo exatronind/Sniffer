@@ -1,6 +1,6 @@
 ../Core/Src/pulse_analysis.c:20:6:analyze_pulses	32	static
-../Core/Src/pulse_analysis.c:58:17:get_duty_cycles	8	static
-../Core/Src/pulse_analysis.c:63:6:convert_duty_to_bits	16	static
-../Core/Src/pulse_analysis.c:73:16:get_bit_sequence	8	static
-../Core/Src/pulse_analysis.c:78:9:verify_payload	8	static
-../Core/Src/pulse_analysis.c:84:6:analyze_payload	16	static
+../Core/Src/pulse_analysis.c:65:17:get_duty_cycles	8	static
+../Core/Src/pulse_analysis.c:70:6:convert_duty_to_bits	16	static
+../Core/Src/pulse_analysis.c:80:16:get_bit_sequence	8	static
+../Core/Src/pulse_analysis.c:85:9:verify_payload	8	static
+../Core/Src/pulse_analysis.c:91:6:analyze_payload	16	static

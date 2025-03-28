@@ -1,7 +1,7 @@
-../Core/Src/pulse_capture.c:31:6:find_start_pulse_and_realign	16	static
-../Core/Src/pulse_capture.c:75:6:processPulses	16	static
-../Core/Src/pulse_capture.c:102:6:get_Sample	8	static
-../Core/Src/pulse_capture.c:116:6:HAL_GPIO_EXTI_Rising_Callback	16	static
-../Core/Src/pulse_capture.c:126:6:HAL_GPIO_EXTI_Falling_Callback	16	static
-../Core/Src/pulse_capture.c:137:26:get_width_pulses	8	static
-../Core/Src/pulse_capture.c:142:6:setTimerPulses	16	static
+../Core/Src/pulse_capture.c:33:6:find_start_pulse_and_realign	24	static
+../Core/Src/pulse_capture.c:85:6:processPulses	16	static
+../Core/Src/pulse_capture.c:112:6:get_Sample	8	static
+../Core/Src/pulse_capture.c:126:6:HAL_GPIO_EXTI_Rising_Callback	16	static
+../Core/Src/pulse_capture.c:136:6:HAL_GPIO_EXTI_Falling_Callback	16	static
+../Core/Src/pulse_capture.c:147:26:get_width_pulses	8	static
+../Core/Src/pulse_capture.c:152:6:setTimerPulses	16	static

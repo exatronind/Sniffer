@@ -20,13 +20,15 @@ void get_Sample(void);
 // Sem 'volatile', o compilador poderia armazenar valores em registradores,
 // impedindo a detecção correta das mudanças feitas pelas interrupções.
 
-static uint32_t pulse_buffer[PULSE_BUFFER_SIZE];
+uint32_t pulse_buffer[PULSE_BUFFER_SIZE];
+uint32_t pulse_buffer_debug[PULSE_BUFFER_SIZE];
 static uint32_t pulse_width[40];
 uint8_t data_ready = 0;
-static uint16_t pulse_index = 0;
+uint16_t pulse_index;
 static TIM_HandleTypeDef *htim = NULL;
-static uint32_t idleTimer = 0;
-static uint8_t buffer_cleared = 0; // Flag para indicar se o buffer já foi limpo
+uint32_t idleTimer;
+uint8_t buffer_cleared; // Flag para indicar se o buffer já foi limpo
+uint32_t sample_count;
 
 void find_start_pulse_and_realign(void)
 {
@@ -50,11 +52,18 @@ void find_start_pulse_and_realign(void)
         }
     }
 
+#ifdef DEBUG
+    for (int k = 0; k < PULSE_BUFFER_SIZE; k++)
+    {
+    	pulse_buffer_debug[k] = pulse_buffer[k];  // Copia elemento por elemento
+    }
+#endif
     // Passo 2: Se encontrou, recalcular os pulse_widths a partir deste ponto
     if (start_index != (-1) && (start_index + 40) < PULSE_BUFFER_SIZE)
     {
         for (uint8_t j = 0, i = start_index; j < 40; i++, j++)
         {
+
             pulse_width[j] = (pulse_buffer[i + 1] >= pulse_buffer[i])
                                  ? (pulse_buffer[i + 1] - pulse_buffer[i])
                                  : ((0xFFFF - pulse_buffer[i]) + pulse_buffer[i + 1]);
@@ -62,6 +71,7 @@ void find_start_pulse_and_realign(void)
 
         data_ready = 1; // Marca os dados como prontos
         pulse_index = 0;
+        sample_count++;
     }
     else
     {
@@ -79,7 +89,7 @@ void processPulses()
 
     if ((++idleTimer) > 1) // Garante que pelo menos passou 2 ms da ultima leitura de borda e entao habilita para a leitura
     {
-        if (pulse_index >= 40) // Certifica que temos pelo menos 40 pulsos, comeca no zero
+        if (pulse_index >= 39) // Certifica que temos pelo menos 40 pulsos, comeca no zero
         {
             find_start_pulse_and_realign();
             // RESET_TIMER(htim);

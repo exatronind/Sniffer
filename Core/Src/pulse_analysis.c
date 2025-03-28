@@ -28,28 +28,35 @@ void analyze_pulses(void)
         lowTime = pulse_widths[i + 1];
         totalTime = highTime + lowTime;
 
-       /* if (totalTime > 0)
+        /* if (totalTime > 0)
+         {
+             // Se não for a última posição, calcula normalmente
+             if (j != BIT_FINAL)
+             {
+                 duty_cycles[j] = (highTime * 100) / totalTime;
+             }
+             // Última posição tem tratamento especial
+             else
+             {
+                 duty_cycles[j] = (highTime < MAX_TIME_LOW) ? 50 : 90;
+             }
+         }
+         else
+         {
+             duty_cycles[j] = 0; // Evita divisão por zero
+         }*/
+
+        // Outra Estrategia
+
+        if (j == BIT_FINAL)
         {
-            // Se não for a última posição, calcula normalmente
-            if (j != BIT_FINAL)
-            {
-                duty_cycles[j] = (highTime * 100) / totalTime;
-            }
-            // Última posição tem tratamento especial
-            else
-            {
-                duty_cycles[j] = (highTime < MAX_TIME_LOW) ? 50 : 90;
-            }
+            duty_cycles[j] = (highTime <= LAST_BIT_LENGTH) ? 50 : 90;
         }
         else
         {
-            duty_cycles[j] = 0; // Evita divisão por zero
-        }*/
 
-        //Outra Estrategia
-
-        duty_cycles[j] = (highTime <= MAX_TIME_LOW) ? 50 : 90;
-
+            duty_cycles[j] = (highTime <= MAX_TIME_LOW) ? 50 : 90;
+        }
     }
 
     decode_ready = 1;

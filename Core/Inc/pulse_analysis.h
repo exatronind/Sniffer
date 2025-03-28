@@ -11,13 +11,14 @@
 #include <stdint.h>
 
 #define DUTY_CYCLE_SIZE 20
-#define MAX_TIME_LOW 90
+#define MAX_TIME_LOW 96
 #define BIT_FINAL 19
 #define DUTY_CYCLE_VALUE_HIGH 68
 #define SIZE_VECTOR_BITS 19
 #define EXPECTED_BIT_0 1
 #define EXPECTED_BIT_1 0
 #define EXPECTED_BIT_18 0
+#define LAST_BIT_LENGTH 130 
 
 extern uint8_t decode_ready;
 extern uint8_t payload_ready;

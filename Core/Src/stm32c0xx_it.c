@@ -56,6 +56,7 @@
 
 /* External variables --------------------------------------------------------*/
 extern TIM_HandleTypeDef htim14;
+extern TIM_HandleTypeDef htim16;
 /* USER CODE BEGIN EV */
 
 /* USER CODE END EV */
@@ -151,17 +152,42 @@ void EXTI4_15_IRQHandler(void)
     // HAL_GPIO_EXTI_IRQHandler(PIR_Pin);
     /* USER CODE BEGIN EXTI4_15_IRQn 1 */
 
+    //    if (!data_ready && (pulse_index < PULSE_BUFFER_SIZE))
+    //    {
+    //        pulse_buffer[pulse_index++] = TIM3->CNT;
+    //        idleTimer = 0;      // Reset o tempo de inatividade quando um novo pulso chega
+    //        buffer_cleared = 0; // Se chegou um novo pulso, indica que o buffer não está limpo
+    //    }
+
     if (EXTI->RPR1 & EXTI_RPR1_RPIF14)
     {
-        GPIOA->ODR |= GPIO_ODR_OD9;
+        //GPIOA->ODR |= GPIO_ODR_OD9;
         EXTI->RPR1 |= EXTI_RPR1_RPIF14;
-        get_Sample();
+        // get_Sample();
+
+        if (!data_ready && (pulse_index < PULSE_BUFFER_SIZE))
+        {
+            pulse_buffer[pulse_index++] = TIM3->CNT;
+            idleTimer = 0;      // Reset o tempo de inatividade quando um novo pulso chega
+            buffer_cleared = 0; // Se chegou um novo pulso, indica que o buffer não está limpo
+        }
+
     }
     if (EXTI->FPR1 & EXTI_FPR1_FPIF14)
     {
-        GPIOA->ODR &= ~GPIO_ODR_OD9;
+        //GPIOA->ODR |= GPIO_ODR_OD9;
+        //GPIOA->ODR &= ~GPIO_ODR_OD9;
         EXTI->FPR1 |= EXTI_FPR1_FPIF14;
-        get_Sample();
+        // get_Sample();
+
+        if (!data_ready && (pulse_index < PULSE_BUFFER_SIZE))
+        {
+            pulse_buffer[pulse_index++] = TIM3->CNT;
+            idleTimer = 0;      // Reset o tempo de inatividade quando um novo pulso chega
+            buffer_cleared = 0; // Se chegou um novo pulso, indica que o buffer não está limpo
+        }
+
+        //GPIOA->ODR &= ~GPIO_ODR_OD9;
     }
 
     /* USER CODE END EXTI4_15_IRQn 1 */
@@ -179,6 +205,20 @@ void TIM14_IRQHandler(void)
     /* USER CODE BEGIN TIM14_IRQn 1 */
 
     /* USER CODE END TIM14_IRQn 1 */
+}
+
+/**
+ * @brief This function handles TIM16 global interrupt.
+ */
+void TIM16_IRQHandler(void)
+{
+    /* USER CODE BEGIN TIM16_IRQn 0 */
+
+    /* USER CODE END TIM16_IRQn 0 */
+    HAL_TIM_IRQHandler(&htim16);
+    /* USER CODE BEGIN TIM16_IRQn 1 */
+
+    /* USER CODE END TIM16_IRQn 1 */
 }
 
 /* USER CODE BEGIN 1 */
