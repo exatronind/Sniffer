@@ -12,7 +12,8 @@ static uint16_t duty_cycles[DUTY_CYCLE_SIZE];
 static uint8_t bit_sequence[SIZE_VECTOR_BITS]; // BIT_SEQUENCE_SIZE deve ser 19
 uint8_t decode_ready = 0;
 uint8_t payload_ready = 0;
-uint16_t erro_payload = 0;
+uint8_t message_done = 0;
+int16_t erro_payload = 0;
 int16_t valor_PIR = 0;
 
 uint8_t verify_payload(void);
@@ -104,4 +105,13 @@ void analyze_payload(void)
         valor_PIR <<= 1;
         valor_PIR |= bit_sequence[i];
     }
+
+    message_done = 1;
+}
+
+int16_t getErroPIR(void){
+    return erro_payload;
+}
+int16_t getPirValue(void){
+    return valor_PIR;
 }

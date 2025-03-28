@@ -1,6 +1,8 @@
-../Core/Src/pulse_analysis.c:20:6:analyze_pulses	5
-../Core/Src/pulse_analysis.c:65:17:get_duty_cycles	1
-../Core/Src/pulse_analysis.c:70:6:convert_duty_to_bits	2
-../Core/Src/pulse_analysis.c:80:16:get_bit_sequence	1
-../Core/Src/pulse_analysis.c:85:9:verify_payload	4
-../Core/Src/pulse_analysis.c:91:6:analyze_payload	3
+../Core/Src/pulse_analysis.c:21:6:analyze_pulses	5
+../Core/Src/pulse_analysis.c:66:17:get_duty_cycles	1
+../Core/Src/pulse_analysis.c:71:6:convert_duty_to_bits	2
+../Core/Src/pulse_analysis.c:81:16:get_bit_sequence	1
+../Core/Src/pulse_analysis.c:86:9:verify_payload	4
+../Core/Src/pulse_analysis.c:92:6:analyze_payload	3
+../Core/Src/pulse_analysis.c:112:9:getErroPIR	1
+../Core/Src/pulse_analysis.c:115:9:getPirValue	1

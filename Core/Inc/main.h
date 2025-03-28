@@ -33,6 +33,7 @@ extern "C" {
 /* USER CODE BEGIN Includes */
 #include "pulse_capture.h"
 #include "pulse_analysis.h"
+#include "uart_send.h"
 /* USER CODE END Includes */
 
 /* Exported types ------------------------------------------------------------*/

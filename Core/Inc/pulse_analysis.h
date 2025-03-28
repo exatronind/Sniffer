@@ -22,11 +22,14 @@
 
 extern uint8_t decode_ready;
 extern uint8_t payload_ready;
-
+extern uint8_t message_done;
 
 void analyze_pulses(void);
 void convert_duty_to_bits(void);
 const uint16_t *get_duty_cycles(void);
 void analyze_payload(void);
+
+int16_t getErroPIR(void);
+int16_t getPirValue(void);
 
 #endif /* INC_PULSE_ANALYSIS_H_ */
